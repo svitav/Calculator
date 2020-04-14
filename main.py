@@ -1,13 +1,14 @@
 import tkinter
+import math as M
 
 expression = ""
 
 def addToExpression(addition):
     global expression
     if expression == "0":
-        expression = addition
+        expression = str(addition)
     else:
-        expression = expression + addition
+        expression = str(expression) + str(addition)
     
     app.result.set(expression)
 
@@ -18,8 +19,25 @@ def clear():
 
 def solve():
     global expression
+    if "^" in expression:
+        expression=str(expression).replace("^", "**")
+    if "√" in expression:
+        expression=str(expression).replace("√", "M.sqrt")
+    try:
+        app.result.set(eval(expression))
+        expression = eval(expression)
+    except:
+        app.result.set("Error")
+        expression="0"
+    
+
+def delete():
+    global expression
+    if len(str(expression)) > 1:
+        expression = str(expression)[:-1]
+    else:
+        expression = "0"
     app.result.set(eval(expression))
-    expression = "0"
 
 class window(tkinter.Tk):
     def __init__(self):
@@ -37,46 +55,57 @@ class window(tkinter.Tk):
         self.output=tkinter.Label(textvariable=self.result, borderwidth=2, relief="sunken")
         self.output.grid(row=0, column=0, columnspan=4, sticky="NSEW")
 
-        self.buttonClear=tkinter.Button(text="C", width=4, height=2, command=clear)
-        self.buttonClear.grid(row=1, column=0, sticky="NSEW")
-
-        self.button1=tkinter.Button(text="1", width=4, height=4, command= lambda: addToExpression("1"))
-        self.button2=tkinter.Button(text="2", width=4, height=4, command= lambda: addToExpression("2"))
-        self.button3=tkinter.Button(text="3", width=4, height=4, command= lambda: addToExpression("3"))
-        self.button4=tkinter.Button(text="4", width=4, height=4, command= lambda: addToExpression("4"))
-        self.button5=tkinter.Button(text="5", width=4, height=4, command= lambda: addToExpression("5"))
-        self.button6=tkinter.Button(text="6", width=4, height=4, command= lambda: addToExpression("6"))
-        self.button7=tkinter.Button(text="7", width=4, height=4, command= lambda: addToExpression("7"))
-        self.button8=tkinter.Button(text="8", width=4, height=4, command= lambda: addToExpression("8"))
-        self.button9=tkinter.Button(text="9", width=4, height=4, command= lambda: addToExpression("9"))
-        self.button0=tkinter.Button(text="0", width=4, height=4, command= lambda: addToExpression("0"))
-
-        self.button1.grid(row=2, column=0, sticky="NSEW")
-        self.button2.grid(row=2, column=1, sticky="NSEW")
-        self.button3.grid(row=2, column=2, sticky="NSEW")
-        self.button4.grid(row=3, column=0, sticky="NSEW")
-        self.button5.grid(row=3, column=1, sticky="NSEW")
-        self.button6.grid(row=3, column=2, sticky="NSEW")
-        self.button7.grid(row=4, column=0, sticky="NSEW")
-        self.button8.grid(row=4, column=1, sticky="NSEW")
-        self.button9.grid(row=4, column=2, sticky="NSEW")
-        self.button0.grid(row=5, column=0, sticky="NSEW")
-
-        self.buttonDivide=tkinter.Button(text="/", width=4, height=4, command= lambda: addToExpression("/"))
-        self.buttonMultiply=tkinter.Button(text="*", width=4, height=4, command= lambda: addToExpression("*"))
-        self.buttonMinus=tkinter.Button(text="-", width=4, height=4, command= lambda: addToExpression("-"))
-        self.buttonPlus=tkinter.Button(text="+", width=4, height=4, command= lambda: addToExpression("+"))
-        self.buttonPeriod=tkinter.Button(text=".", width=4, height=4, command= lambda: addToExpression("."))
+        self.buttonClear=tkinter.Button(text="C", width=4, height=2, command=clear, bg="lightGrey")
+        self.buttonDel=tkinter.Button(text="Del", width=4, height=2, command=delete, bg="lightGrey")
+        self.buttonPower=tkinter.Button(text="^", width=4, height=2, command= lambda: addToExpression("^"), bg="lightGrey")
+        self.buttonSqRt=tkinter.Button(text="√", width=4, height=2, command= lambda: addToExpression("√("), bg="lightGrey")
+        self.buttonOB=tkinter.Button(text="(", width=2, height=2, command= lambda: addToExpression("("), bg="lightGrey")
+        self.buttonCB=tkinter.Button(text=")", width=2, height=2, command= lambda: addToExpression(")"), bg="lightGrey")
         
-        self.buttonDivide.grid(row=2, column=3, sticky="NSEW")
-        self.buttonMultiply.grid(row=3, column=3, sticky="NSEW")
-        self.buttonMinus.grid(row=4, column=3, sticky="NSEW")
-        self.buttonPlus.grid(row=5, column=3, sticky="NSEW")
-        self.buttonPeriod.grid(row=5, column=1, sticky="NSEW")
-        
-        self.buttonEquals=tkinter.Button(text="=", width=4, height=4, command=solve)
+        self.buttonClear.grid(row=1, column=0, sticky="NSEW", rowspan=1)
+        self.buttonDel.grid(row=2, column=0, sticky="NSEW", rowspan=1)
+        self.buttonPower.grid(row=1, column=1, sticky="NSEW", rowspan=2)
+        self.buttonSqRt.grid(row=1, column=2, sticky="NSEW", rowspan=2)
+        self.buttonOB.grid(row=1, column=3, sticky="NSEW", rowspan=1)
+        self.buttonCB.grid(row=2, column=3, sticky="NSEW", rowspan=1)
 
-        self.buttonEquals.grid(row=5, column=2, sticky="NSEW")
+        self.button1=tkinter.Button(text="1", width=4, height=4, command= lambda: addToExpression("1"), bg="grey")
+        self.button2=tkinter.Button(text="2", width=4, height=4, command= lambda: addToExpression("2"), bg="grey")
+        self.button3=tkinter.Button(text="3", width=4, height=4, command= lambda: addToExpression("3"), bg="grey")
+        self.button4=tkinter.Button(text="4", width=4, height=4, command= lambda: addToExpression("4"), bg="grey")
+        self.button5=tkinter.Button(text="5", width=4, height=4, command= lambda: addToExpression("5"), bg="grey")
+        self.button6=tkinter.Button(text="6", width=4, height=4, command= lambda: addToExpression("6"), bg="grey")
+        self.button7=tkinter.Button(text="7", width=4, height=4, command= lambda: addToExpression("7"), bg="grey")
+        self.button8=tkinter.Button(text="8", width=4, height=4, command= lambda: addToExpression("8"), bg="grey")
+        self.button9=tkinter.Button(text="9", width=4, height=4, command= lambda: addToExpression("9"), bg="grey")
+        self.button0=tkinter.Button(text="0", width=4, height=4, command= lambda: addToExpression("0"), bg="grey")
+
+        self.button1.grid(row=3, column=0, sticky="NSEW")
+        self.button2.grid(row=3, column=1, sticky="NSEW")
+        self.button3.grid(row=3, column=2, sticky="NSEW")
+        self.button4.grid(row=4, column=0, sticky="NSEW")
+        self.button5.grid(row=4, column=1, sticky="NSEW")
+        self.button6.grid(row=4, column=2, sticky="NSEW")
+        self.button7.grid(row=5, column=0, sticky="NSEW")
+        self.button8.grid(row=5, column=1, sticky="NSEW")
+        self.button9.grid(row=5, column=2, sticky="NSEW")
+        self.button0.grid(row=6, column=0, sticky="NSEW")
+
+        self.buttonDivide=tkinter.Button(text="/", width=4, height=4, command= lambda: addToExpression("/"), bg="lightGrey")
+        self.buttonMultiply=tkinter.Button(text="*", width=4, height=4, command= lambda: addToExpression("*"), bg="lightGrey")
+        self.buttonMinus=tkinter.Button(text="-", width=4, height=4, command= lambda: addToExpression("-"), bg="lightGrey")
+        self.buttonPlus=tkinter.Button(text="+", width=4, height=4, command= lambda: addToExpression("+"), bg="lightGrey")
+        self.buttonPeriod=tkinter.Button(text=".", width=4, height=4, command= lambda: addToExpression("."), bg="lightGrey")
+        
+        self.buttonDivide.grid(row=3, column=3, sticky="NSEW")
+        self.buttonMultiply.grid(row=4, column=3, sticky="NSEW")
+        self.buttonMinus.grid(row=5, column=3, sticky="NSEW")
+        self.buttonPlus.grid(row=6, column=3, sticky="NSEW")
+        self.buttonPeriod.grid(row=6, column=1, sticky="NSEW")
+        
+        self.buttonEquals=tkinter.Button(text="=", width=4, height=4, command=solve, bg="lightGrey")
+
+        self.buttonEquals.grid(row=6, column=2, sticky="NSEW")
 
 app = window()
 app.mainloop()
