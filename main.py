@@ -1,37 +1,36 @@
 import tkinter
 import math as M
 
-expression = ""
+expression = ""        #definice matematickeho vyrazu
 
-def addToExpression(addition):
+def addToExpression(addition):        #fce pridani znaku do vyrazu
     global expression
     if expression == "0":
         expression = str(addition)
     else:
         expression = str(expression) + str(addition)
     
-    app.result.set(expression)
+    app.result.set(expression)        #zobrazeni vyrazu
 
-def clear():
+def clear():        #fce pro mazani celeho vyrazu
     global expression
     expression = "0"
     app.result.set(expression)
 
-def solve():
+def solve():        #fce pro vyresenni vyrazu
     global expression
     if "^" in expression:
-        expression=str(expression).replace("^", "**")
+        expression=str(expression).replace("^", "**")        #prepsani mocniny
     if "√" in expression:
-        expression=str(expression).replace("√", "M.sqrt")
-    try:
-        app.result.set(eval(expression))
+        expression=str(expression).replace("√", "M.sqrt")        #prepsani odmocniny
+    try:        #zjisteni problemu
+        app.result.set(eval(expression))        #reseni
         expression = eval(expression)
     except:
         app.result.set("Error")
         expression="0"
     
-
-def delete():
+def delete():        #fce mazani jednoho znaku
     global expression
     if len(str(expression)) > 1:
         expression = str(expression)[:-1]
@@ -39,7 +38,7 @@ def delete():
         expression = "0"
     app.result.set(eval(expression))
 
-class window(tkinter.Tk):
+class window(tkinter.Tk):        #trida aplikace
     def __init__(self):
         tkinter.Tk.__init__(self)
 
@@ -49,10 +48,11 @@ class window(tkinter.Tk):
         self.grid_rowconfigure(0,weight=1)
         self.grid_rowconfigure(1,weight=1)
 
-        self.title("Calculator")
+        self.title("Calculator")        #zakladni nastaveni aplikace
         self.result=tkinter.StringVar()
         self.result.set("0")
-        self.output=tkinter.Label(textvariable=self.result, borderwidth=2, relief="sunken")
+        
+        self.output=tkinter.Label(textvariable=self.result, borderwidth=2, relief="sunken")        #pridani tlacitek
         self.output.grid(row=0, column=0, columnspan=4, sticky="NSEW")
 
         self.buttonClear=tkinter.Button(text="C", width=4, height=2, command=clear, bg="lightGrey")
@@ -108,4 +108,4 @@ class window(tkinter.Tk):
         self.buttonEquals.grid(row=6, column=2, sticky="NSEW")
 
 app = window()
-app.mainloop()
+app.mainloop()        #start aplikace
